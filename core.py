@@ -21,8 +21,9 @@ inventory = [{
 def get_vehicleprice(buy):
     if buy == 'FORD TRUCK':
         price = 210
-    if buy == 'CHEVY IMPALA':
+    elif buy == 'CHEVY IMPALA':
         price = 120
-    if buy == 'THUNDERBIRD':
+    elif buy == 'THUNDERBIRD':
         price = 150
+
     return price
