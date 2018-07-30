@@ -1,0 +1,3 @@
+Ford Truck,210,6
+Chevy Impala,120,8
+Thunderbird,150,4
