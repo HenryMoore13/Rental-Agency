@@ -8,6 +8,24 @@ def greeting():
     name = input('What Is Your Name? ')
 
 
+def choice():
+    print('--------------------------------------------------------------')
+    print('\nEnter:   (1)Employee   (2)Customer   (3)Quit')
+    duty = input('\nAre You An Employee Or Customer?? ')
+    while True:
+        if duty == '1':
+            employee()
+            break
+        elif duty == '2':
+            get_option()
+            break
+        elif duty == '3':
+            print('Thank You Come Again!!')
+            exit()
+        else:
+            print('Invalid Choice... Please Retype Choice!!')
+
+
 def employee():
     inventory = load_inventory()
     print('(Inventory)   (Revenue)   (History)')
@@ -35,79 +53,64 @@ def get_option():
     print()
     print('      (Rent)           (Return)')
     option = input('\nWould your like to rent a Vehicle or return one?\n')
-    if option == 'RENT':
-        customer()
-    elif option == 'RETURN':
-        print('thanks for shopping with our Rental Agency Come again!!')
+    while True:
+        if option == 'RENT':
+            customer()
+            choice()
+            break
+
+        elif option == 'RETURN':
+            print('thanks for shopping with our Rental Agency Come again!!')
+            choice()
+            break
 
 
 def customer():
 
     print('--------------------------------------------------------------')
     print('\n (Ford Truck)  (Chevy Impala)  (Thunderbird)')
+    buy = input('\nWhat Vehicle Would You Like To Rent? ').upper().strip()
+    price = get_vehicleprice(buy)
+    if buy == 'FORD TRUCK':
+        rent = int(input('\nHow Many Days Would You Like To Rent? '))
+        print(
+            '\nThis Vehicle Will be ${} per day & you have {} days to return it!!'.
+            format(price, rent))
+    elif buy == 'CHEVY IMPALA':
+        rent = int(input('\nHow Many Days Would You Like To Rent? '))
+        print(
+            '\nThis Vehicle Will be ${} per day & you have {} days to return it!!'.
+            format(price, rent))
+    elif buy == 'THUNDERBIRD':
+        rent = int(input('\nHow Many Days Would You Like To Rent? '))
+        print(
+            '\nThis Vehicle Will be ${} per day & you have {} days to return it!!'.
+            format(price, rent))
+        print('Invalid Choice... Please Retype Choice!!')
+        print()
+        buy = input('>>> ').upper().strip()
+    total = (rent * price)
+    write_to_history(buy, price, total)
 
-    while True:
-
-        buy = input('\nWhat Vehicle Would You Like To Rent? ').upper().strip()
-        if buy == 'FORD TRUCK':
-            rent = input('\nHow Many Days Would You Like To Rent? ')
-            print(
-                '\nThis Vehicle Will be $210 per day & you have {} days to return it!!'.
-                format(rent))
-        elif buy == 'CHEVY IMPALA':
-            rent = input('\nHow Many Days Would You Like To Rent? ')
-            print(
-                '\nThis Vehicle Will be $120 per day & you have {} days to return it!!'.
-                format(rent))
-        elif buy == 'THUNDERBIRD':
-            rent = input('\nHow Many Days Would You Like To Rent? ')
-            print(
-                '\nThis Vehicle Will be $150 per day & you have {} days to return it!!'.
-                format(rent))
-        else:
-            print('Invalid Choice... Please Retype Choice!!')
-            print()
-            buy = input('>>> ').upper().strip()
+    return buy
+    return price
+    return total
 
 
-def write_to_history(buy):
-
-    buy = customer
+def write_to_history(buy, price, total):
     time = datetime.now()
-    text = '\n{},{}'.format(buy, time)
+    text = '\n{}, {}, {}, {}'.format(buy, time, price, total)
     with open('history.txt', 'a') as file:
         file.write(text)
-
-
-def choice():
-
-    duty = input('\nAre You An Employee Or Customer?? ')
-    while not (duty == '1' or duty == '2' or duty == '3'):
-        if duty == '1':
-            employee()
-            exit()
-        elif duty == '2':
-            get_option()
-        elif duty == '3':
-            print('Thank You Come Again!!')
-            exit()
-        else:
-            print('Invalid Choice... Please Retype Choice!!')
 
 
 def main():
 
     greeting()
-    print('--------------------------------------------------------------')
-    print('\nEnter:   (1)Employee   (2)Customer   (3)Quit')
 
     choice()
 
-    get_option()
-    buy = customer
-    rent = int
-
-    write_to_history(buy)
+    buy = customer()
 
 
 if __name__ == '__main__':

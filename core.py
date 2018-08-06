@@ -21,13 +21,12 @@ def Load_inventory():
     }]
 
 
-def get_vehicleprice():
-    buy = customer()
+def get_vehicleprice(buy):
     if buy == 'FORD TRUCK':
         price = 210
-    elif buy == 'CHEVY IMPALA':
+    if buy == 'CHEVY IMPALA':
         price = 120
-    elif buy == 'THUNDERBIRD':
+    if buy == 'THUNDERBIRD':
         price = 150
 
     return price
