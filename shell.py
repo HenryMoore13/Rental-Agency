@@ -6,9 +6,10 @@ from datetime import datetime
 def greeting():
     print('\nWelcome To Henry Fords Rental Agency!!!\n')
     name = input('What Is Your Name? ')
+    return name
 
 
-def choice():
+def choice(name):
     print('--------------------------------------------------------------')
     print('\nEnter:   (1)Employee   (2)Customer   (3)Quit')
     duty = input('\nAre You An Employee Or Customer?? ')
@@ -17,7 +18,7 @@ def choice():
             employee()
             break
         elif duty == '2':
-            get_option()
+            get_option(name)
             break
         elif duty == '3':
             print('Thank You Come Again!!')
@@ -48,24 +49,24 @@ def employee():
         file.close()
 
 
-def get_option():
+def get_option(name):
     print('--------------------------------------------------------------')
     print()
     print('      (Rent)           (Return)')
     option = input('\nWould your like to rent a Vehicle or return one?\n')
     while True:
         if option == 'RENT':
-            customer()
-            choice()
+            customer(name)
+            choice(name)
             break
 
         elif option == 'RETURN':
             print('thanks for shopping with our Rental Agency Come again!!')
-            choice()
+            choice(name)
             break
 
 
-def customer():
+def customer(name):
 
     print('--------------------------------------------------------------')
     print('\n (Ford Truck)  (Chevy Impala)  (Thunderbird)')
@@ -90,27 +91,28 @@ def customer():
         print()
         buy = input('>>> ').upper().strip()
     total = (rent * price)
-    write_to_history(buy, price, total)
+    write_to_history(name, buy, price, total)
 
     return buy
     return price
     return total
 
 
-def write_to_history(buy, price, total):
+def write_to_history(name, buy, total):
+
     time = datetime.now()
-    text = '\n{}, {}, {}, {}'.format(buy, time, price, total)
+    text = '\n{}, {}, {}, {}'.format(name, buy, time, total)
     with open('history.txt', 'a') as file:
         file.write(text)
 
 
 def main():
 
-    greeting()
+    name = greeting()
 
-    choice()
+    choice(name)
 
-    buy = customer()
+    buy = customer(name)
 
 
 if __name__ == '__main__':
