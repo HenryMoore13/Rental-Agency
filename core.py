@@ -22,6 +22,7 @@ def Load_inventory():
 
 
 def get_vehicleprice(buy):
+
     if buy == 'FORD TRUCK':
         price = 210
     if buy == 'CHEVY IMPALA':
