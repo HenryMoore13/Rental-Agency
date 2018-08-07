@@ -98,10 +98,6 @@ def shop():
         rent = input('>>> ').upper().strip()
 
 
-def write_to_history2():
-    time = datetime.now()
-
-
 def customer(name):
     print('--------------------------------------------------------------')
     print('\n (Ford Truck)  (Chevy Impala)  (Thunderbird)')
