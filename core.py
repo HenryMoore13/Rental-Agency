@@ -2,32 +2,24 @@ from disk import *
 from shell import *
 
 
-def Load_inventory():
-    inventory = [{
-        'Name': 'FORD TRUCK',
-        'stock': 6,
-        'price': 210,
-        'replacement cost': 2500
-    }, {
-        'Name': 'CHEVY IMPALA',
-        'stock': 3,
-        'price': 120,
-        'replacement cost': 1500
-    }, {
-        'Name': 'THUNDERBIRD',
-        'stock': 4,
-        'price': 150,
-        'replacement cost': 2100
-    }]
+def inventory_data(raw_data):
+    inv = {}
+    for line in raw_data:
+        name, price_str, quant_str = line.split(',')
+        item = {
+            'name': name,
+            'price': int(price_str),
+            'quantity': int(quant_str),
+        }
+        inv[name] = item
+    return inv
 
 
-def get_vehicleprice(buy):
+def rm_stock(inv, item):
+    inv[item]['quantity'] -= 1
+    return inv[item]['quantity']
 
-    if buy == 'FORD TRUCK':
-        price = 210
-    if buy == 'CHEVY IMPALA':
-        price = 120
-    if buy == 'THUNDERBIRD':
-        price = 150
 
-    return price
+def add_stock(inv, item):
+    inv[item]['quantity'] += 1
+    return inv[item]['quantity']

@@ -9,17 +9,17 @@ def greeting():
     return name
 
 
-def choice(name):
+def choice(name, inv):
     print('--------------------------------------------------------------')
     print('\nEnter:   (1)Employee   (2)Customer   (3)Quit')
-    duty = input('\nAre You An Employee Or Customer?? ')
     while True:
+        duty = input('\nAre You An Employee Or Customer?? ')
         if duty == '1':
             employee()
-            choice(name)
+            choice(name, inv)
             break
         elif duty == '2':
-            get_option(name)
+            get_option(name, inv)
             break
         elif duty == '3':
             print('Thank You Come Again!!')
@@ -29,122 +29,104 @@ def choice(name):
 
 
 def employee():
-    inventory = load_inventory()
+    inventory = load_inventory('inventory.txt')
+    rev = total_revenue()
     print()
     print('(Inventory)   (Revenue)   (History)')
-    program = input('\nWhat Would You Like To View?? ').upper().strip()
-    while not (program == 'INVENTORY' or program == 'REVENUE'
-               or program == 'HISTORY'):
-        print('Invalid Choice... Please Retype Choice')
-        print()
-        program = input('>>> ').upper().strip()
-    if program == 'INVENTORY':
-        print()
-        file = open('inventory.txt', 'r')
-        contents = file.read()
-        print(contents)
-        file.close()
-    if program == 'HISTORY':
-        file = open('history.txt', 'r')
-        contents = file.read()
-        print(contents)
-        file.close()
+    while True:
+        program = input('\nWhat Would You Like To View?? ').upper().strip()
+        if program == 'INVENTORY':
+            print()
+            file = open('inventory.txt', 'r')
+            contents = file.read()
+            print(contents)
+            file.close()
+            break
+        elif program == 'HISTORY':
+            file = open('history.txt', 'r')
+            contents = file.read()
+            print(contents)
+            file.close()
+            break
+        else:
+            print('Invalid Choice... Please Retype Choice')
 
 
-def get_option(name):
+def get_option(name, inv):
     print('--------------------------------------------------------------')
     print()
     print('      (Rent)           (Return)')
-    option = input('\nWould your like to rent a Vehicle or return one?\n'
-                   ).upper().strip()
+
     while True:
+        option = input('\nWould your like to rent a Vehicle or return one?'
+                       ).upper().strip()
         if option == 'RENT':
-            customer(name)
-            choice(name)
+            customer(name, inv)
+            choice(name, inv)
             break
 
         elif option == 'RETURN':
-            shop()
+            shop(inv)
             print('Thanks for shopping with our Rental Agency Come again!!')
+            choice(name, inv)
             exit()
+        else:
+            print('Invalid Choice... Please Retype Choice!!')
+            print()
 
 
-def shop():
+def shop(inv):
     print('--------------------------------------------------------------')
     print('\n (Ford Truck)  (Chevy Impala)  (Thunderbird)')
     shop = input('\nWhat Vehicle Would you Like to Return? ').upper().strip()
-    price = get_vehicleprice(shop)
-    if shop == 'FORD TRUCK':
+    inventory = inv
+    if shop in inv:
         rent = int(input('How many days did you hold this vehicle? '))
+        add_stock(inv, shop)
+        save_inventory(inventory)
         print('______________________________________')
-        print('This vehicle was {} per day..'.format(price))
-        print('The total amount is {}'.format(price * rent))
+        print('This vehicle was {} per day..'.format(inv[shop]['price']))
+        print('The total amount is {}'.format(inv[shop]['price'] * rent))
         print('______________________________________')
-    elif shop == 'CHEVY IMPALA':
-        rent = int(input('How many days did you hold this vehicle? '))
-        print('______________________________________')
-        print('This vehicle was {} per day..'.format(price))
-        print('The total amount is {}'.format(price * rent))
-        print('______________________________________')
-    elif buy == 'THUNDERBIRD':
-        rent = int(input('How many days did you hold this vehicle? '))
-        print('______________________________________')
-        print('This vehicle was {} per day..'.format(price))
-        print('The total amount is {}'.format(price * rent))
-        print('______________________________________')
+
     else:
         print('Invalid Choice... Please Retype Choice!!')
         print()
         rent = input('>>> ').upper().strip()
 
 
-def customer(name):
-    print('--------------------------------------------------------------')
-    print('\n (Ford Truck)  (Chevy Impala)  (Thunderbird)')
-    buy = input('\nWhat Vehicle Would You Like To Rent? ').upper().strip()
-    price = get_vehicleprice(buy)
-    if buy == 'FORD TRUCK':
-        rent = int(input('\nHow Many Days Would You Like To Rent? '))
-        print(
-            '\nThis Vehicle Will be ${} per day & you have {} days to return it!!'.
-            format(price, rent))
-    elif buy == 'CHEVY IMPALA':
-        rent = int(input('\nHow Many Days Would You Like To Rent? '))
-        print(
-            '\nThis Vehicle Will be ${} per day & you have {} days to return it!!'.
-            format(price, rent))
-    elif buy == 'THUNDERBIRD':
-        rent = int(input('\nHow Many Days Would You Like To Rent? '))
-        print(
-            '\nThis Vehicle Will be ${} per day & you have {} days to return it!!'.
-            format(price, rent))
-    else:
-        print('Invalid Choice... Please Retype Choice!!')
-        print()
-        buy = input('>>> ').upper().strip()
-    total = (rent * price)
-    write_to_history(name, buy, total)
+def customer(name, inv):
+    while True:
+        print('--------------------------------------------------------------')
+        print('\n (Ford Truck)  (Chevy Impala)  (Thunderbird)')
+        buy = input('\nWhat Vehicle Would You Like To Rent? ').upper().strip()
+        inventory = inv
+        if buy in inventory:
+            rent = int(input('\nHow Many Days Would You Like To Rent? '))
+            print(
+                '\nThis Vehicle Will be ${} per day & you have {} days to return it!!'.
+                format(inv[buy]['price'], rent))
+            rm_stock(inv, buy)
+            save_inventory(inventory)
 
-    return buy
-    return price
-    return total
+            total = (rent * inv[buy]['price'])
+            write_to_history(name, buy, total)
+            break
 
-
-def write_to_history(name, buy, total):
-
-    time = datetime.now()
-    text = '\n{} | {} | {} | {}'.format(name, buy, time, total)
-    with open('history.txt', 'a') as file:
-        file.write(text)
+        else:
+            print('Invalid Choice... Please Retype Choice!!')
 
 
 def main():
+    raw_data = load_inventory('inventory.txt')
+    inv = inventory_data(raw_data)
 
     name = greeting()
 
-    choice(name)
+    choice(name, inv)
 
-    buy = customer(name)
+    buy = customer(name, inv)
+    save_inventory()
 
 
 if __name__ == '__main__':
