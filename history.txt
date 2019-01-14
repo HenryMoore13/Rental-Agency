@@ -1,3 +1,4 @@
+Name| Car_Type | Date.of.Purchase| Rent_Total
 Henry | FORD TRUCK | 2018-08-07 10:53:13.414928 | 420
 Josh | THUNDERBIRD | 2018-08-07 10:54:17.525580 | 600
 Jason | FORD TRUCK | 2018-08-15 08:42:31.094239 | 840
